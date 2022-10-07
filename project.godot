@@ -24,6 +24,10 @@ config/name="Sidescroller Movement"
 run/main_scene="res://Managing/Game.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Global="*res://Managing/Global.gd"
+
 [display]
 
 window/size/width=320
