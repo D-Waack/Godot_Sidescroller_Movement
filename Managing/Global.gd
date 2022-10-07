@@ -1,3 +1,3 @@
 extends Node
 
-const TILE_SIZE = 16
+const TILE_SIZE : float = 16.0
