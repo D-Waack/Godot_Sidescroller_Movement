@@ -20,7 +20,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Platformer Controls"
+config/name="Sidescroller Movement"
 run/main_scene="res://Managing/Game.tscn"
 config/icon="res://icon.png"
 
