@@ -156,7 +156,7 @@ states/run/node = SubResource( 10 )
 states/run/position = Vector2( 587.148, -6.33333 )
 transitions = [ "idle", "run", SubResource( 11 ), "run", "idle", SubResource( 12 ), "run", "fall", SubResource( 13 ), "idle", "fall", SubResource( 19 ), "rise", "fall", SubResource( 20 ), "idle", "rise", SubResource( 21 ), "run", "rise", SubResource( 22 ), "fall", "land", SubResource( 23 ), "land", "idle", SubResource( 24 ), "land", "run", SubResource( 25 ) ]
 start_node = "idle"
-graph_offset = Vector2( -7, -83 )
+graph_offset = Vector2( 51, -37 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=16]
 
@@ -167,7 +167,6 @@ script = ExtResource( 2 )
 position = Vector2( 0, -16 )
 texture = ExtResource( 1 )
 hframes = 23
-frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 1, -8.5 )
