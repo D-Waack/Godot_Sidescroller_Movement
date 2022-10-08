@@ -118,6 +118,7 @@ func horizontal_movement(horizontal_input, delta):
 	else:
 		velocity.x = move_toward(velocity.x, horizontal_input * MAX_SPEED, ACCELERATION * delta)
 
+# This function overrides the velocity value in order to perform the wall jump consistently
 func wall_jump_override(wall_direction):
 	if not can_wall_jump or wall_direction == 0 or is_on_floor():
 		return
