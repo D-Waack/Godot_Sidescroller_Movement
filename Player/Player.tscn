@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://Images/Characters/king_crimson.png" type="Texture" id=1]
 [ext_resource path="res://Player/Player.gd" type="Script" id=2]
@@ -20,6 +20,18 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ 1 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite:flip_h")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ true ]
 }
 
 [sub_resource type="Animation" id=4]
@@ -106,6 +118,22 @@ tracks/0/keys = {
 "values": [ 14, 15, 16, 17 ]
 }
 
+[sub_resource type="Animation" id=26]
+resource_name = "wall_slide"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 4 ]
+}
+
 [sub_resource type="AnimationNodeAnimation" id=8]
 animation = "fall"
 
@@ -120,6 +148,9 @@ animation = "rise"
 
 [sub_resource type="AnimationNodeAnimation" id=10]
 animation = "run"
+
+[sub_resource type="AnimationNodeAnimation" id=27]
+animation = "wall_slide"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=11]
 
@@ -143,18 +174,24 @@ switch_mode = 2
 [sub_resource type="AnimationNodeStateMachineTransition" id=25]
 switch_mode = 2
 
+[sub_resource type="AnimationNodeStateMachineTransition" id=28]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=29]
+
 [sub_resource type="AnimationNodeStateMachine" id=15]
 states/fall/node = SubResource( 8 )
 states/fall/position = Vector2( 588.383, 180.333 )
 states/idle/node = SubResource( 9 )
 states/idle/position = Vector2( 350.407, -6.33333 )
 states/land/node = SubResource( 17 )
-states/land/position = Vector2( 765.667, 136.333 )
+states/land/position = Vector2( 855, 89.6663 )
 states/rise/node = SubResource( 18 )
 states/rise/position = Vector2( 351.889, 181.667 )
 states/run/node = SubResource( 10 )
 states/run/position = Vector2( 587.148, -6.33333 )
-transitions = [ "idle", "run", SubResource( 11 ), "run", "idle", SubResource( 12 ), "run", "fall", SubResource( 13 ), "idle", "fall", SubResource( 19 ), "rise", "fall", SubResource( 20 ), "idle", "rise", SubResource( 21 ), "run", "rise", SubResource( 22 ), "fall", "land", SubResource( 23 ), "land", "idle", SubResource( 24 ), "land", "run", SubResource( 25 ) ]
+states/wall_slide/node = SubResource( 27 )
+states/wall_slide/position = Vector2( 854.889, 191.333 )
+transitions = [ "idle", "run", SubResource( 11 ), "run", "idle", SubResource( 12 ), "run", "fall", SubResource( 13 ), "idle", "fall", SubResource( 19 ), "rise", "fall", SubResource( 20 ), "idle", "rise", SubResource( 21 ), "run", "rise", SubResource( 22 ), "fall", "land", SubResource( 23 ), "land", "idle", SubResource( 24 ), "land", "run", SubResource( 25 ), "fall", "wall_slide", SubResource( 28 ), "wall_slide", "land", SubResource( 29 ) ]
 start_node = "idle"
 graph_offset = Vector2( 51, -37 )
 
@@ -166,6 +203,7 @@ script = ExtResource( 2 )
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 0, -16 )
 texture = ExtResource( 1 )
+flip_h = true
 hframes = 23
 frame = 1
 
@@ -180,6 +218,7 @@ anims/idle = SubResource( 5 )
 anims/land = SubResource( 7 )
 anims/rise = SubResource( 6 )
 anims/run = SubResource( 3 )
+anims/wall_slide = SubResource( 26 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource( 15 )
@@ -187,3 +226,29 @@ anim_player = NodePath("../Animator")
 active = true
 parameters/playback = SubResource( 16 )
 script = ExtResource( 3 )
+
+[node name="Wall_Raycasts" type="Node2D" parent="."]
+
+[node name="Left_Rays" type="Node2D" parent="Wall_Raycasts"]
+
+[node name="LeftRayCast2D" type="RayCast2D" parent="Wall_Raycasts/Left_Rays"]
+position = Vector2( -5, -14 )
+enabled = true
+cast_to = Vector2( -2, 0 )
+
+[node name="LeftRayCast2D2" type="RayCast2D" parent="Wall_Raycasts/Left_Rays"]
+position = Vector2( -5, -3 )
+enabled = true
+cast_to = Vector2( -2, 0 )
+
+[node name="Right_Rays" type="Node2D" parent="Wall_Raycasts"]
+
+[node name="RightRayCast2D" type="RayCast2D" parent="Wall_Raycasts/Right_Rays"]
+position = Vector2( 7, -14 )
+enabled = true
+cast_to = Vector2( 2, 0 )
+
+[node name="RightRayCast2D2" type="RayCast2D" parent="Wall_Raycasts/Right_Rays"]
+position = Vector2( 7, -3 )
+enabled = true
+cast_to = Vector2( 2, 0 )

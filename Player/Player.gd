@@ -8,6 +8,9 @@ class_name Player
 # visual nodes
 onready var sprite : Sprite = $Sprite
 onready var animator : AnimationTree = $AnimationTree
+# raycast nodes
+onready var left_wall_raycasts: Node2D = $Wall_Raycasts/Left_Rays
+onready var right_wall_raycasts: Node2D = $Wall_Raycasts/Right_Rays
 
 ### World Constants
 const UP_DIRECTION : Vector2 = Vector2.UP # needed for move_and_slide function
@@ -25,26 +28,36 @@ export(float) var MAX_FALL_SPEED = 200.0 # maximum speed at which player charact
 export(float) var JUMP_FORCE = 140.0 # force with which the player jumps, has to counter gravity for a little bit. The higher this is, the higher and floatier the jump will be
 export(float) var MIN_AIR_DISTANCE = 60.0 # minimum distance a jump will go through before it can be stopped by letting go of the jump button
 ## Other speed variables
-#export(float) var MIN_WALL_JUMP_DISTANCE = 30.0 # 
+export(float) var MAX_WALL_SPEED = 40.0
+export(float) var MIN_WALL_JUMP_DISTANCE = 30.0 # 
 
 ### Ability variables
 export var can_double_jump : bool = true # allows player character to double jump
+export var can_wall_jump : bool = true # allows player to wall slide and wall jump
 
 ### Physics Variables 
 # These are physics variables that are changed during runtime, not manually set
 var velocity : Vector2 = Vector2.ZERO # velocity at which player character is moving
 
 ### State Machine Variables
-enum {IDLE, RUN, RISE, FALL} # states of the state machine
+enum {IDLE, RUN, RISE, FALL, WALL_SLIDE} # states of the state machine
 var state = IDLE # current state at which player character is at
 var double_jumped : bool = false # flag for if the player has double jumped or not
+
+### Setup function that runs at the start
+func _ready():
+	for raycast in left_wall_raycasts.get_children():
+		raycast.add_exception(self)
+	for raycast in right_wall_raycasts.get_children():
+		raycast.add_exception(self)
 
 ### Functions that run every frame
 # Physics process, main loop separated into subroutines
 func _physics_process(delta):
 	var horizontal_input : float = get_horizontal_input() 
-	state = get_current_state(horizontal_input)
-	vertical_movement(delta)
+	var wall_direction : int = get_wall_direction()
+	state = get_current_state(horizontal_input, wall_direction)
+	vertical_movement(wall_direction, delta)
 	horizontal_movement(horizontal_input, delta)
 	animation(horizontal_input)
 
@@ -55,7 +68,7 @@ func get_horizontal_input() -> float:
 	return Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 
 # This function returns the current state of the state machine the player is in
-func get_current_state(horizontal_input):
+func get_current_state(horizontal_input, wall_direction):
 	if is_on_floor(): # player character is touching the ground
 		if horizontal_input != 0:
 			return RUN 
@@ -64,12 +77,19 @@ func get_current_state(horizontal_input):
 		if velocity.y < 10: # if the player is rising, or just started falling
 			return RISE 
 		else:
+			if horizontal_input != 0 and horizontal_input == wall_direction:
+				return WALL_SLIDE
 			return FALL 
 
 # This function will apply gravity and other forces (like jump force) to the player character
-func vertical_movement(delta):
+func vertical_movement(wall_direction, delta):
 	velocity.y += GRAVITY * delta
-	velocity.y = min(velocity.y, MAX_FALL_SPEED) 
+	
+	if state == WALL_SLIDE:
+		velocity.y = min(velocity.y, MAX_WALL_SPEED)
+	else:
+		velocity.y = min(velocity.y, MAX_FALL_SPEED) 
+	
 	if is_on_floor(): 
 		double_jumped = false
 		if Input.is_action_just_pressed("ui_up"):
@@ -115,8 +135,28 @@ func animation(horizontal_input):
 			elif horizontal_input < 0:
 				flip_character(true)
 			animator.travel("fall")
+		WALL_SLIDE:
+			if horizontal_input > 0:
+				flip_character(true) # here the values are opposite
+			elif horizontal_input < 0:
+				flip_character(false)
+			animator.travel("fall")
 
 # This function flips the sprite backwards to face the left or right when called
 # When called with true, the character faces left, when called with false, the character faces right
 func flip_character(flip : bool):
 	sprite.flip_h = flip
+
+func get_wall_direction():
+	var on_left_wall = int(check_wall(left_wall_raycasts))
+	var on_right_wall = int(check_wall(right_wall_raycasts))
+	
+	return -on_left_wall + on_right_wall
+
+# This function checks if the raycasts are colliding for wall jumping
+# will not work with slopes
+func check_wall(wall_raycasts):
+	for raycast in wall_raycasts.get_children():
+		if raycast.is_colliding():
+			return true
+	return false
