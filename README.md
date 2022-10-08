@@ -24,6 +24,14 @@ Lowering the gravity or max fall speed will make the jump feel floatier. Raising
 
 When letting go of the jump button before reaching maximum height, the player character starts falling. Min air distance is how high the jump is even if pressed for a single frame. 
 
+### Max wall speed, Wall jump distance
+Used for wall jumps. Max wall speed is the maximum speed the player character falls down at when wall sliding. Wall jump distance is the base horizontal force the character will be pushed towards when wall jumping.
+
+The player character can wall jump without wall sliding. It's also possible to make it so the player cannot reclimb the wall after wall jumping, but that would require a different setup (perhaps with a very short timer during which the player cannot input a different direction).
+
+### Can double jump, Can wall jump
+These variables are booleans that can be used to allow or prevent a player character from having the abilities described. This could be used in a scenario where the player unlocks the abilities after getting a power up or other similar scenarios. It is also possible to completely disable these abilities, although removing them from the code entirely would be better at that point.
+
 ## Other settings
 The camera has no special settings. It's a child of the player node in order to follow it. Its limits are set on _ready() so it doesn't go out of the tilemap area.
 
@@ -31,7 +39,7 @@ In order to animate the player, an animation tree node was used. The state machi
 
 ## Features I'll add
 <ol>
-  <li>Wall jumping</li>
+  <li><del> Wall jumping </del></li>
   <li>Coyote jump and jump buffer</li>
   <li>Health, damage (with some spikes)</li>
   <li>Knockback</li>
