@@ -252,3 +252,9 @@ cast_to = Vector2( 2, 0 )
 position = Vector2( 7, -3 )
 enabled = true
 cast_to = Vector2( 2, 0 )
+
+[node name="Timers" type="Node2D" parent="."]
+
+[node name="WallJumpTimer" type="Timer" parent="Timers"]
+wait_time = 0.2
+one_shot = true
