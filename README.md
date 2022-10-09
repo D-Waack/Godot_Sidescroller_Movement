@@ -40,7 +40,7 @@ In order to animate the player, an animation tree node was used. The state machi
 ## Features I'll add
 <ol>
   <li><del> Wall jumping </del></li>
-  <li>Coyote jump and jump buffer</li>
+  <li><del> Coyote jump and jump buffer </del></li>
   <li>Health, damage (with some spikes)</li>
   <li>Knockback</li>
   <li>More map to play around on</li>
