@@ -1,8 +1,9 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Managing/Camera.gd" type="Script" id=1]
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Images/Tilesets/sheet_9.png" type="Texture" id=3]
+[ext_resource path="res://Objects/Spike.tscn" type="PackedScene" id=4]
 
 [sub_resource type="ConvexPolygonShape2D" id=2]
 points = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
@@ -298,3 +299,17 @@ position = Vector2( 107, 207 )
 [node name="Camera" type="Camera2D" parent="Player"]
 current = true
 script = ExtResource( 1 )
+
+[node name="Obstacles" type="Node2D" parent="."]
+
+[node name="Spike" parent="Obstacles" instance=ExtResource( 4 )]
+position = Vector2( 216, 200 )
+
+[node name="Spike2" parent="Obstacles" instance=ExtResource( 4 )]
+position = Vector2( 232, 200 )
+
+[node name="Spike3" parent="Obstacles" instance=ExtResource( 4 )]
+position = Vector2( 248, 200 )
+
+[node name="Spike4" parent="Obstacles" instance=ExtResource( 4 )]
+position = Vector2( 264, 200 )
