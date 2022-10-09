@@ -28,18 +28,6 @@ tracks/0/keys = {
 "update": 0,
 "values": [ 1 ]
 }
-tracks/1/type = "value"
-tracks/1/path = NodePath("Sprite:flip_h")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ true ]
-}
 
 [sub_resource type="Animation" id=4]
 resource_name = "fall"
@@ -290,9 +278,7 @@ script = ExtResource( 2 )
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 0, -16 )
 texture = ExtResource( 1 )
-flip_h = true
 hframes = 23
-frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 1, -8.5 )
@@ -360,7 +346,6 @@ one_shot = true
 one_shot = true
 
 [node name="HUD" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="HealthBar" type="Control" parent="HUD"]
 margin_left = 16.0
@@ -389,6 +374,7 @@ margin_bottom = 240.0
 script = ExtResource( 9 )
 
 [node name="ColorRect" type="ColorRect" parent="HUD/DeathOverlay"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0.0588235, 0, 0, 0.819608 )
