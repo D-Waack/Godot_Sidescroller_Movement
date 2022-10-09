@@ -45,12 +45,16 @@ In order to animate the player, an animation tree node was used. The state machi
   <li><del> Wall jumping</del> Done!</li>
   <li><del> Coyote jump and jump buffer</del> Done!</li>
   <li><del>Health, damage (with some spikes)</del> Done!</li>
-  <li>Knockback</li>
+  <li><del>Knockback</del> Done!</li>
   <li>More map to play around on</li>
   <li>Maybe some other stuff!</li>
 </ol> 
 
 ## Things I need to do:
 - Fix wall slide animation and timing 
+
+- Add visual for double jump
+
+- Fix knockback distance wonkiness (likely due to friction vs acceleration differences, similar to wall jump wonkiness)
 
 - Feed the king
