@@ -47,7 +47,7 @@ export var can_wall_jump : bool = true # allows player to wall slide and wall ju
 var velocity : Vector2 = Vector2.ZERO # velocity at which player character is moving
 
 ### State Machine Variables
-enum {IDLE, RUN, RISE, FALL, WALL_SLIDE} # states of the state machine
+enum {IDLE, RUN, RISE, FALL, WALL_SLIDE, DEAD} # states of the state machine
 var state = IDLE # current state at which player character is at
 var double_jumped : bool = false # flag for if the player has double jumped or not
 var buffered_jump : bool = false # flag for it the jump button was pressed right before hitting the ground
@@ -56,9 +56,6 @@ var can_coyote_jump : bool = false # flag for coyote jump (when running off ledg
 ### Health variables
 export (float) var max_health = 100.0
 onready var health = max_health setget set_health
-
-### Signals
-signal killed
 
 ### Setup function that runs at the start
 func _ready():
@@ -176,6 +173,8 @@ func animation(horizontal_input):
 			elif horizontal_input < 0:
 				flip_character(false)
 			animator.travel("fall")
+		DEAD:
+			damage_animator.play("kill")
 
 func extra_movement(was_on_floor):
 	if was_on_floor and not is_on_floor() and velocity.y >= 0:
@@ -206,14 +205,18 @@ func check_wall(wall_raycasts):
 
 ### Damage functions
 func damage(value):
+	if state == DEAD: return
 	if invulnerability_timer.is_stopped():
 		invulnerability_timer.start()
-		set_health(health - value)
 		damage_animator.play("damage")
 		damage_animator.queue("blink")
+		set_health(health - value)
 
 func kill():
-	print("RIP!")
+	invulnerability_timer.stop()
+	damage_animator.play("disappear")
+	state = DEAD
+	set_physics_process(false)
 
 ### Setters
 func set_health(new_health):
@@ -221,9 +224,8 @@ func set_health(new_health):
 	health = clamp(new_health, 0, max_health)
 	if health != previous_health:
 		health_bar.update_health(health)
-		if health == 0:
+		if health <= 0:
 			kill()
-			emit_signal("killed")
 
 ### Signal functions
 func _on_JumpBufferTimer_timeout():
@@ -233,4 +235,4 @@ func _on_CoyoteJumpTimer_timeout():
 	can_coyote_jump = false
 
 func _on_InvulnerabilityTimer_timeout():
-	damage_animator.play("RESET")
+	damage_animator.play("normalize")
