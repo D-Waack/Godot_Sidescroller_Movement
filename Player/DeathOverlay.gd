@@ -8,7 +8,7 @@ func _ready():
 
 func _physics_process(_delta):
 	if Input.is_action_just_pressed("ui_accept"):
-		print("Restart stage !!TODO")
+		get_tree().reload_current_scene()
 
 func display_death_panel():
 	panel.set_visible(true)
