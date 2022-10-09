@@ -49,3 +49,8 @@ In order to animate the player, an animation tree node was used. The state machi
   <li>More map to play around on</li>
   <li>Maybe some other stuff!</li>
 </ol> 
+
+##Things I need to do:
+- Fix wall slide animation and timing 
+
+- Feed the king
