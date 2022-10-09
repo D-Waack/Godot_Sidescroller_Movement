@@ -8,6 +8,7 @@ class_name Player
 # visual nodes
 onready var sprite : Sprite = $Sprite
 onready var animator : AnimationTree = $AnimationTree
+onready var damage_animator : AnimationPlayer = $DamageAnimator
 # raycast nodes
 onready var left_wall_raycasts : Node2D = $WallRaycasts/LeftRays
 onready var right_wall_raycasts : Node2D = $WallRaycasts/RightRays
@@ -208,6 +209,8 @@ func damage(value):
 	if invulnerability_timer.is_stopped():
 		invulnerability_timer.start()
 		set_health(health - value)
+		damage_animator.play("damage")
+		damage_animator.queue("blink")
 
 func kill():
 	print("RIP!")
@@ -228,3 +231,6 @@ func _on_JumpBufferTimer_timeout():
 
 func _on_CoyoteJumpTimer_timeout():
 	can_coyote_jump = false
+
+func _on_InvulnerabilityTimer_timeout():
+	damage_animator.play("RESET")
