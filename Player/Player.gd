@@ -14,6 +14,9 @@ onready var right_wall_raycasts : Node2D = $WallRaycasts/RightRays
 # timers
 onready var jump_buffer_timer : Timer = $Timers/JumpBufferTimer
 onready var coyote_jump_timer : Timer = $Timers/CoyoteJumpTimer
+onready var invulnerability_timer : Timer = $Timers/InvulnerabilityTimer
+# hud elements
+onready var health_bar = $HUD/HealthBar
 
 ### World Constants
 const UP_DIRECTION : Vector2 = Vector2.UP # needed for move_and_slide function
@@ -48,6 +51,13 @@ var state = IDLE # current state at which player character is at
 var double_jumped : bool = false # flag for if the player has double jumped or not
 var buffered_jump : bool = false # flag for it the jump button was pressed right before hitting the ground
 var can_coyote_jump : bool = false # flag for coyote jump (when running off ledge)
+
+### Health variables
+export (float) var max_health = 100.0
+onready var health = max_health setget set_health
+
+### Signals
+signal killed
 
 ### Setup function that runs at the start
 func _ready():
@@ -192,6 +202,27 @@ func check_wall(wall_raycasts):
 			return true
 	return false
 
+
+### Damage functions
+func damage(value):
+	if invulnerability_timer.is_stopped():
+		invulnerability_timer.start()
+		set_health(health - value)
+
+func kill():
+	print("RIP!")
+
+### Setters
+func set_health(new_health):
+	var previous_health = health
+	health = clamp(new_health, 0, max_health)
+	if health != previous_health:
+		health_bar.update_health(health)
+		if health == 0:
+			kill()
+			emit_signal("killed")
+
+### Signal functions
 func _on_JumpBufferTimer_timeout():
 	buffered_jump = false
 
