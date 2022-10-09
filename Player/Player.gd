@@ -19,6 +19,7 @@ onready var invulnerability_timer : Timer = $Timers/InvulnerabilityTimer
 # hud elements
 onready var health_bar = $HUD/HealthBar
 onready var death_screen = $HUD/DeathOverlay
+onready var hint_text = $HUD/Hint_Text
 
 ### World Constants
 const UP_DIRECTION : Vector2 = Vector2.UP # needed for move_and_slide function
@@ -250,3 +251,6 @@ func _on_CoyoteJumpTimer_timeout():
 
 func _on_InvulnerabilityTimer_timeout():
 	damage_animator.play("normalize")
+
+func _on_Sign_display_hint(new_text):
+	hint_text.text = new_text
