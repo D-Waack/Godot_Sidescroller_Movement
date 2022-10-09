@@ -9,7 +9,7 @@
 [ext_resource path="res://Player/HealthBar.gd" type="Script" id=7]
 [ext_resource path="res://Images/HUD/healthbar_fill.png" type="Texture" id=8]
 [ext_resource path="res://Player/DeathOverlay.gd" type="Script" id=9]
-[ext_resource path="res://Images/Fonts/Alkalami-Regular.ttf" type="DynamicFontData" id=10]
+[ext_resource path="res://Fonts/Alkalami-Regular.ttf" type="DynamicFontData" id=10]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 6, 8.5 )
