@@ -227,34 +227,41 @@ active = true
 parameters/playback = SubResource( 16 )
 script = ExtResource( 3 )
 
-[node name="Wall_Raycasts" type="Node2D" parent="."]
+[node name="WallRaycasts" type="Node2D" parent="."]
 
-[node name="Left_Rays" type="Node2D" parent="Wall_Raycasts"]
+[node name="LeftRays" type="Node2D" parent="WallRaycasts"]
 
-[node name="LeftRayCast2D" type="RayCast2D" parent="Wall_Raycasts/Left_Rays"]
+[node name="LeftRayCast2D" type="RayCast2D" parent="WallRaycasts/LeftRays"]
 position = Vector2( -5, -14 )
 enabled = true
 cast_to = Vector2( -2, 0 )
 
-[node name="LeftRayCast2D2" type="RayCast2D" parent="Wall_Raycasts/Left_Rays"]
+[node name="LeftRayCast2D2" type="RayCast2D" parent="WallRaycasts/LeftRays"]
 position = Vector2( -5, -3 )
 enabled = true
 cast_to = Vector2( -2, 0 )
 
-[node name="Right_Rays" type="Node2D" parent="Wall_Raycasts"]
+[node name="RightRays" type="Node2D" parent="WallRaycasts"]
 
-[node name="RightRayCast2D" type="RayCast2D" parent="Wall_Raycasts/Right_Rays"]
+[node name="RightRayCast2D" type="RayCast2D" parent="WallRaycasts/RightRays"]
 position = Vector2( 7, -14 )
 enabled = true
 cast_to = Vector2( 2, 0 )
 
-[node name="RightRayCast2D2" type="RayCast2D" parent="Wall_Raycasts/Right_Rays"]
+[node name="RightRayCast2D2" type="RayCast2D" parent="WallRaycasts/RightRays"]
 position = Vector2( 7, -3 )
 enabled = true
 cast_to = Vector2( 2, 0 )
 
 [node name="Timers" type="Node2D" parent="."]
 
-[node name="WallJumpTimer" type="Timer" parent="Timers"]
-wait_time = 0.2
+[node name="JumpBufferTimer" type="Timer" parent="Timers"]
+wait_time = 0.1
 one_shot = true
+
+[node name="CoyoteJumpTimer" type="Timer" parent="Timers"]
+wait_time = 0.15
+one_shot = true
+
+[connection signal="timeout" from="Timers/JumpBufferTimer" to="." method="_on_JumpBufferTimer_timeout"]
+[connection signal="timeout" from="Timers/CoyoteJumpTimer" to="." method="_on_CoyoteJumpTimer_timeout"]

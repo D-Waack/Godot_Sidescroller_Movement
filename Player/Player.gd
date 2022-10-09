@@ -9,10 +9,11 @@ class_name Player
 onready var sprite : Sprite = $Sprite
 onready var animator : AnimationTree = $AnimationTree
 # raycast nodes
-onready var left_wall_raycasts : Node2D = $Wall_Raycasts/Left_Rays
-onready var right_wall_raycasts : Node2D = $Wall_Raycasts/Right_Rays
+onready var left_wall_raycasts : Node2D = $WallRaycasts/LeftRays
+onready var right_wall_raycasts : Node2D = $WallRaycasts/RightRays
 # timers
-onready var wall_jump_timer : Timer = $Timers/WallJumpTimer
+onready var jump_buffer_timer : Timer = $Timers/JumpBufferTimer
+onready var coyote_jump_timer : Timer = $Timers/CoyoteJumpTimer
 
 ### World Constants
 const UP_DIRECTION : Vector2 = Vector2.UP # needed for move_and_slide function
@@ -45,6 +46,8 @@ var velocity : Vector2 = Vector2.ZERO # velocity at which player character is mo
 enum {IDLE, RUN, RISE, FALL, WALL_SLIDE} # states of the state machine
 var state = IDLE # current state at which player character is at
 var double_jumped : bool = false # flag for if the player has double jumped or not
+var buffered_jump : bool = false # flag for it the jump button was pressed right before hitting the ground
+var can_coyote_jump : bool = false # flag for coyote jump (when running off ledge)
 
 ### Setup function that runs at the start
 func _ready():
@@ -58,6 +61,7 @@ func _ready():
 func _physics_process(delta):
 	var horizontal_input : float = get_horizontal_input() 
 	var wall_direction : int = get_wall_direction()
+	var was_on_floor : bool = is_on_floor()
 	state = get_current_state(horizontal_input, wall_direction)
 	vertical_movement(delta)
 	horizontal_movement(horizontal_input, delta)
@@ -65,6 +69,7 @@ func _physics_process(delta):
 	velocity = move_and_slide(velocity, UP_DIRECTION) # function that actually moves the player based on velocity
 	# !!! up direction is needed for "is_on_floor()" and "is_on_wall()" to work
 	animation(horizontal_input)
+	extra_movement(was_on_floor)
 
 ### State machine routines
 # This function uses the Input singleton to get what direction the player is pressing
@@ -96,19 +101,22 @@ func vertical_movement(delta):
 	else:
 		velocity.y = min(velocity.y, MAX_FALL_SPEED) 
 	
-	if is_on_floor(): 
+	if is_on_floor() or can_coyote_jump:
 		double_jumped = false
-		if Input.is_action_just_pressed("ui_up"):
+		if Input.is_action_just_pressed("ui_up") or buffered_jump:
 			velocity.y = -JUMP_FORCE 
+			buffered_jump = false
+			can_coyote_jump = false
 	else: 
-		if Input.is_action_just_released("ui_up") and velocity.y < -MIN_AIR_DISTANCE: 
+		if not Input.is_action_pressed("ui_up") and velocity.y < -MIN_AIR_DISTANCE: 
 			velocity.y = -MIN_AIR_DISTANCE # cut velocity's Y value down so the player stops when letting go of the jump button
-			if Input.is_action_just_pressed("ui_up") and can_wall_jump:
-				velocity.y = -JUMP_FORCE
-		elif not double_jumped and can_double_jump: 
-			if Input.is_action_just_pressed("ui_up"):
+		if Input.is_action_just_pressed("ui_up"):
+			if not double_jumped and can_double_jump:
 				double_jumped = true 
 				velocity.y = -JUMP_FORCE
+			else:
+				buffered_jump = true
+				jump_buffer_timer.start()
 
 # This function is responsible for moving the player character through space according to the input
 # When there is no input, apply friction, when there is, apply acceleration
@@ -158,6 +166,11 @@ func animation(horizontal_input):
 				flip_character(false)
 			animator.travel("fall")
 
+func extra_movement(was_on_floor):
+	if was_on_floor and not is_on_floor() and velocity.y >= 0:
+		can_coyote_jump = true
+		coyote_jump_timer.start()
+
 # This function flips the sprite backwards to face the left or right when called
 # When called with true, the character faces left, when called with false, the character faces right
 func flip_character(flip : bool):
@@ -178,3 +191,9 @@ func check_wall(wall_raycasts):
 		if raycast.is_colliding():
 			return true
 	return false
+
+func _on_JumpBufferTimer_timeout():
+	buffered_jump = false
+
+func _on_CoyoteJumpTimer_timeout():
+	can_coyote_jump = false
