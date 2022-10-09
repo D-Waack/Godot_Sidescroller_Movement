@@ -18,6 +18,7 @@ onready var coyote_jump_timer : Timer = $Timers/CoyoteJumpTimer
 onready var invulnerability_timer : Timer = $Timers/InvulnerabilityTimer
 # hud elements
 onready var health_bar = $HUD/HealthBar
+onready var death_screen = $HUD/DeathOverlay
 
 ### World Constants
 const UP_DIRECTION : Vector2 = Vector2.UP # needed for move_and_slide function
@@ -217,6 +218,7 @@ func kill():
 	damage_animator.play("disappear")
 	state = DEAD
 	set_physics_process(false)
+	death_screen.display_death_panel()
 
 ### Setters
 func set_health(new_health):
