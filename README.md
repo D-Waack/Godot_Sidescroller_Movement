@@ -32,6 +32,9 @@ The player character can wall jump without wall sliding. It's also possible to m
 ### Can double jump, Can wall jump
 These variables are booleans that can be used to allow or prevent a player character from having the abilities described. This could be used in a scenario where the player unlocks the abilities after getting a power up or other similar scenarios. It is also possible to completely disable these abilities, although removing them from the code entirely would be better at that point.
 
+### Max health
+Player character's maximum health value.
+
 ## Other settings
 The camera has no special settings. It's a child of the player node in order to follow it. Its limits are set on _ready() so it doesn't go out of the tilemap area.
 
@@ -41,7 +44,7 @@ In order to animate the player, an animation tree node was used. The state machi
 <ol>
   <li><del> Wall jumping </del></li>
   <li><del> Coyote jump and jump buffer </del></li>
-  <li>Health, damage (with some spikes)</li>
+  <li><del>Health, damage (with some spikes)</del></li>
   <li>Knockback</li>
   <li>More map to play around on</li>
   <li>Maybe some other stuff!</li>
