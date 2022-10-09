@@ -357,10 +357,10 @@ wait_time = 0.15
 one_shot = true
 
 [node name="InvulnerabilityTimer" type="Timer" parent="Timers"]
-wait_time = 0.9
 one_shot = true
 
 [node name="HUD" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="HealthBar" type="Control" parent="HUD"]
 margin_left = 16.0

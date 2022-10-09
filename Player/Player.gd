@@ -38,6 +38,8 @@ export(float) var MIN_AIR_DISTANCE = 60.0 # minimum distance a jump will go thro
 ## Other speed variables
 export(float) var MAX_WALL_SPEED = 48.0 # maximum speed when wall sliding
 export(float) var WALL_JUMP_DISTANCE = 128.0 # minimum walljump distance
+export(float) var KNOCKBACK_H_FORCE = 136.0 # horizontal force at which the player character is knocked when taking damage
+export(float) var KNOCKBACK_V_FORCE = 56.0 # vertical force at which the player character is knocked when taking damage
 
 ### Ability variables
 export var can_double_jump : bool = true # allows player character to double jump
@@ -57,6 +59,7 @@ var can_coyote_jump : bool = false # flag for coyote jump (when running off ledg
 ### Health variables
 export (float) var max_health = 100.0
 onready var health = max_health setget set_health
+export (float) var invulnerable_time = 1.4
 
 ### Setup function that runs at the start
 func _ready():
@@ -64,6 +67,7 @@ func _ready():
 		raycast.add_exception(self)
 	for raycast in right_wall_raycasts.get_children():
 		raycast.add_exception(self)
+	invulnerability_timer.wait_time = invulnerable_time
 
 ### Functions that run every frame
 # Physics process, main loop separated into subroutines
@@ -208,10 +212,18 @@ func check_wall(wall_raycasts):
 func damage(value):
 	if state == DEAD: return
 	if invulnerability_timer.is_stopped():
+		knockback()
 		invulnerability_timer.start()
 		damage_animator.play("damage")
 		damage_animator.queue("blink")
 		set_health(health - value)
+
+func knockback():
+	var facing_direction = 1
+	if sprite.flip_h: # facing left
+		facing_direction = -1
+	velocity.x = KNOCKBACK_H_FORCE * -facing_direction
+	velocity.y = -KNOCKBACK_V_FORCE 
 
 func kill():
 	invulnerability_timer.stop()
