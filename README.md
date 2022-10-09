@@ -46,7 +46,7 @@ In order to animate the player, an animation tree node was used. The state machi
   <li><del> Coyote jump and jump buffer</del> Done!</li>
   <li><del>Health, damage (with some spikes)</del> Done!</li>
   <li><del>Knockback</del> Done!</li>
-  <li>More map to play around on</li>
+  <li><del>More map to play around on<del> Done!</li>
   <li>Maybe some other stuff!</li>
 </ol> 
 
