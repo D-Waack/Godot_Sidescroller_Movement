@@ -276,6 +276,7 @@ font_data = ExtResource( 10 )
 font_data = ExtResource( 10 )
 
 [node name="Player" type="KinematicBody2D"]
+z_index = 10
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
