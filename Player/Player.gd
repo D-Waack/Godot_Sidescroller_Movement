@@ -29,7 +29,7 @@ const UP_DIRECTION : Vector2 = Vector2.UP # needed for move_and_slide function
 # They are exported so you can easily tweak them on the editor
 ## Horizontal speed variables
 export(float) var MAX_SPEED = 120.0 # maximum speed at which the player character can move
-export(float) var ACCELERATION = 600.0 # rate at which player character's speed rises
+export(float) var ACCELERATION = 1200.0 # rate at which player character's speed rises
 export(float) var FRICTION = 1200.0 # rate at which player character's speed lowers
 ## Vertical speed variables
 export(float) var GRAVITY = 240.0 # force that pulls player character down, also known as gravity

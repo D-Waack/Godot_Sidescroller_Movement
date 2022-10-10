@@ -278,6 +278,7 @@ font_data = ExtResource( 10 )
 [node name="Player" type="KinematicBody2D"]
 z_index = 10
 script = ExtResource( 2 )
+GRAVITY = 272.0
 
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 0, -16 )
