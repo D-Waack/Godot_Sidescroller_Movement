@@ -517,6 +517,7 @@ hint_text = "Congrats! You've reached the end of the demo! Enjoy this treasure c
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 6 )
+volume_db = -15.0
 autoplay = true
 
 [connection signal="display_hint" from="Objects/Sign" to="Player" method="_on_Sign_display_hint"]
