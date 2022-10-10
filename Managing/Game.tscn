@@ -1,10 +1,11 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Managing/Camera.gd" type="Script" id=1]
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Images/Tilesets/sheet_9.png" type="Texture" id=3]
 [ext_resource path="res://Objects/Spike.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Objects/Sign.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Sounds/Silent_Trees.ogg" type="AudioStream" id=6]
 
 [sub_resource type="ConvexPolygonShape2D" id=2]
 points = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
@@ -513,6 +514,10 @@ hint_text = "A trivial challenge for a noble one."
 [node name="Sign6" parent="Objects" instance=ExtResource( 5 )]
 position = Vector2( 1678, 168 )
 hint_text = "Congrats! You've reached the end of the demo! Enjoy this treasure chest you can't open!"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+autoplay = true
 
 [connection signal="display_hint" from="Objects/Sign" to="Player" method="_on_Sign_display_hint"]
 [connection signal="display_hint" from="Objects/Sign2" to="Player" method="_on_Sign_display_hint"]
